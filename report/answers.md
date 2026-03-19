@@ -1,41 +1,35 @@
 # Answers to Lab01
 
 ## Table of Contents
-- [Task A](#task-a--binding-vs-rebinding)
-- [Task B](#task-b--mutation-vs-rebinding)
-- [Task C](#task-c--function-arguments-are-new-bindings)
-- [Task D](#task-d--default-argument-trap)
-- [Task E](#task-e--copy-semantics-shallow-vs-deep)
-- [Task F](#task-f--reference-counting--gc-cpython)
+- [Task A](#task-a--truthiness)
+- [Task B](#task-b--identity-vs-equality)
+- [Task D](#task-d--pattern-matching)
+- [Additional Questions](#additional-questions)
 
-## Task A $-$ Binding vs Rebinding
-Why `b` **still refers to the old value after** `a = 4`?
+## Task A $-$ Truthiness
+Why does Python treat empty containers as $False$?
 
-In Python, names are bindings, they only refer to an object in memory. When we execute `b = a` we bind `b` to the same object `3`. Initial ids confirm that `a` and `b` refer to the same location in memory. When we perform rebinding `a = 4`, a new object `4` (with a new location) is created in memory and `a` now refers to it. However, it doesn't affect `b` and its corresponding object `3`. That's why after rebinding `a = 4` and still `b = 3`. We see that `id(a)` has changed and `id(b)` remains the same as before the operation.
+When the `__bool__` method is not identified, Python looks for a `__len__` method. The length of an empty container is equal to $0$, and Pythong interprets `0` as **falsy**.
 
-## Task B $-$ Mutation vs Rebinding
-Why both names see the change? What is the difference between **mutation** and **rebinding**?
+## Task B $-$ Identity vs Equality
+When should `is` be used instead of `==`?
 
-* Both names refer to the same object (their ids are the same). When we change `b`, in fact, we change the **object** that it refers to. Here no rebinding happens, as no new object is created, but only the existing one is changed. As a result of mutation, ids do not change. Both `a` and `b` still refer to the same object, that's why both names see the change.
-* Rebinding changes which object the name refers to, thus the id also changes. Mutation changes the object itself. All the names that refer to this object will see the change, and their ids will remain unchanged.
+In general, `is` should be used when the goal is to compare the objects themselves and not only their values. It means, we check where they are located in memory. It is especially important when comparing objects with `None`, `True` or `False`, as they are singletons. Using `==` in this case may result in an unpredicted behaviour (for instance, objects of not `NoneType` can be equal to `None`).
 
-## Task C $-$ Function arguments are new bindings
-Why mutation inside the function affects the caller? Why rebinding inside the function does **not** affect the caller?
+## Task D $-$ Pattern Matching
+Why is `match` convenient for analysing structured data?
 
-* When an argument is passed to a function, we create a new local name as a parameter. The parameter binds to the same object that the argument refers to. That's why mutating the parameter affects the object itself and all the names that refer to it (including the caller). If we don't want the caller to be changed we need to make a copy of the object.
-* When performing rebinding, a new object is created, and the parameter (which is a local name) starts referring to it, so it doesn't affect the initial object and, thus, the caller.
+`Match` significantly simplifies pattern matching. To build the same logic using only `if-elif-else` we would have to write long expressions with `and` and `or`, but this approach is error-prone and makes the code hard to read.
 
-## Task D $-$ Default argument trap
-Why does the list keep growing?
+## Additional Questions
+1. What is the difference between a list comprehension and a generator expression?
 
-In Python default value is created only once when the function is defined and not before each call. That's why this value will refer to the same object in memory throughout the whole program. And when it is changed several times, we get the growing list.
+    Generators use less memory, they do not store all the elements, they produce them one by one. In contrast, list comprehensions use $O(len(list))$ of memory.
 
-## Task E $-$ Copy semantics (shallow vs deep)
-What is the difference between shallow and deep copy?
+2. Why are generators considered lazy?
 
-The difference is noticeable when using nested objects. A nested list is an object in memory that stores references to its elements which are also objects in memory. When a shallow copy is created the list of references is copied to a new object in memory, but the references to the elements stay the same. So elements of `a` and `b` refer to the same objects, in fact. And when `b[0]` is changed, `a` also sees the change. In case of a deep copy, new copies are created for elements of all levels inside the nested object. So a deep copy will consist of other ids. That's why changing the deep copy doesn't affect the initial object.
+    Generators are considered lazy because they produce values on the fly. They go through them one by one, and can be stopped at any moment to resume their work later.
 
-## Task F $-$ Reference counting / GC (CPython)
-Why do we get such an unexpected result for `42`?
+3. What happens when a generator finishes exectution?
 
-It is caused by a CPython optimization. Some objects are very often referred to. That's why it is more effective (we avoid making update operations) to never change their reference counts, and never delete them. Their reference counts are immutable large numbers. However, the exact value may differ across different Python builds. Those objects are called immortal. They are often-used values: small integers, `None`, `True`, `False`, etc.
+    A `StopIteration` exception is thrown when `__next__` method has gone through all the elements and there are no more items to produce.
