@@ -1,35 +1,21 @@
-# Answers to Lab01
+# Answers to Lab03
 
-## Table of Contents
-- [Task A](#task-a--truthiness)
-- [Task B](#task-b--identity-vs-equality)
-- [Task D](#task-d--pattern-matching)
-- [Additional Questions](#additional-questions)
+1. What does it mean that functions in Python are **first-class objects**?
 
-## Task A $-$ Truthiness
-Why does Python treat empty containers as $False$?
+    It means that functions are objects in memory, and we can use them as any other object. We can assign them to variables, store them in containers, pass them as arguments to other functions, and return them from functions.
 
-When the `__bool__` method is not identified, Python looks for a `__len__` method. The length of an empty container is equal to $0$, and Pythong interprets `0` as **falsy**.
+2. What is the difference between a function defined with `def` and a `lambda` expression?
 
-## Task B $-$ Identity vs Equality
-When should `is` be used instead of `==`?
+    * Def-functions have a name, lambda-functions are anonymous (their name is $lambda$).
+    * Def-functions can be complex, have multiple expressions and statements. Lambdas can only have a single expression.
+    * Lambdas always return a value. Usual don't have to return a value, if it is needed they use `return` keyword.
+    * Mostly, the code is more readable when using def-functions.
+    * We use lambda expressions for short, simple, non-reusable functions.
 
-In general, `is` should be used when the goal is to compare the objects themselves and not only their values. It means, we check where they are located in memory. It is especially important when comparing objects with `None`, `True` or `False`, as they are singletons. Using `==` in this case may result in an unpredicted behaviour (for instance, objects of not `NoneType` can be equal to `None`).
+3. What is a **closure**?
 
-## Task D $-$ Pattern Matching
-Why is `match` convenient for analysing structured data?
+    It is a nested function that allows us to access variables of the outer function even when the outer funcion is closed.
 
-`Match` significantly simplifies pattern matching. To build the same logic using only `if-elif-else` we would have to write long expressions with `and` and `or`, but this approach is error-prone and makes the code hard to read.
+4. In what situtations are closures useful?
 
-## Additional Questions
-1. What is the difference between a list comprehension and a generator expression?
-
-    Generators use less memory, they do not store all the elements, they produce them one by one. In contrast, list comprehensions use $O(len(list))$ of memory.
-
-2. Why are generators considered lazy?
-
-    Generators are considered lazy because they produce values on the fly. They go through them one by one, and can be stopped at any moment to resume their work later.
-
-3. What happens when a generator finishes exectution?
-
-    A `StopIteration` exception is thrown when `__next__` method has gone through all the elements and there are no more items to produce.
+    Most commonly, closures are used to create function factories, callbacks, data encapsulation, and decorators.
