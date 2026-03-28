@@ -1,33 +1,32 @@
-# LAB03: Functions as Objects, Lambda, Closures
+# LAB04: Higher-Order Functions, map/filter, Decorators
 
 ## Table of Contents
 - [Goal](#goal)
 - [Lab Structure](#lab-structure)
 - [Getting Started](#getting-started)
 - [Output Structure](#output-structure)
-- [Task A](#task-a--functions-as-objects)
-- [Task B](#task-b--sorting-with-lambda)
-- [Task C](#task-c--function-factory)
-- [Task D](#task-d--closure-counter)
-- [Task E](#task-e--lambda-vs-def)
-- [Task F](#task-f--functional-composition)
+- [Task A](#task-a--high-order-functions)
+- [Task B](#task-b--map)
+- [Task C](#task-c--filter)
+- [Task D](#task-d--mapfilter-vs-comprehensions)
+- [Task E](#task-e--simple-decorator)
+- [Task F](#task-f--decorator-with-arguments)
+- [Task G](#task-g--caching-decorator)
 
 ## Goal
-The goal of this lab is to explore Python functions as **first-class objects** and understand how functions can:
-* be assigned to variables
-* be passed as arguments
-* be created dynamically
-* capture variables from their environment (closures)
+The goal of this lab is to practice using **higher-order functions** and to understand how functions can be used to transform behavior.
 
 Students should demonstrate understanding of:
-* functions as objects
-* lambda expressions
-* closures
-* basic functional composition
+* higher-order functions (functions as arguments and return values)
+* functional transformations using map and filter
+* differences between map/filter and comprehensions
+* decorators and how they modify function behavior
+* decorators with arguments
+* basic caching techniques using decorators 
 
 ## Lab Structure
 ```
-lab03/
+lab04/
 ├─ README.md
 ├─ requirements.txt
 │
@@ -35,11 +34,18 @@ lab03/
 │   └─ answers.md
 │
 └─ src/
-    └─ lab03.py
+    ├─ lab04.py
+    ├─ task_a.py
+    ├─ task_b.py
+    ├─ task_c.py
+    ├─ task_d.py
+    ├─ task_e.py
+    ├─ task_f.py
+    └─ task_g.py
 ```
 
 ## Getting Started
-Open `lab03/` and run the following to setup the environment:
+Open `lab04/` and run the following to setup the environment:
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
@@ -51,26 +57,29 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 ```
 Command to run the program:
 ```bash
-python src/lab03.py
+python src/lab04.py
 ```
 
 ## Output Structure
-The program prints six sections (A–F), each demonstrating a specific concept: Python functions, lambda expressions, closures, basic functional composition.
+The program prints six sections (A–F), each demonstrating a specific concept: high-order functions, map/filter, list comprehensions, decorators.
 
-### Task A $-$ Functions as Objects
-The example demostrates the basic use of built-in, lambda, and custom functions in Python.
+### Task A $-$ High-Order Functions
+Implemented an `apply` function to demonstrate passing a function as an argument.
 
-### Task B $-$ Sorting with Lambda
-The demonstration explains how lambda expressions can be used to sort lists by different values (e.g. age, name).
+### Task B $-$ map
+Utilized `map` to square numbers and convert numeric lists to strings.
 
-### Task C $-$ Function Factory
-The code shows how to create identical functions with varying parameters through implementing a "function factory" function.
+### Task C $-$ filter
+Utilized `filter` to filter lists for even numbers and values greater than 10.
 
-### Task D $-$ Closure Counter
-This task presents an example of how closures can be used to store an internal state of a function.
+### Task D $-$ map/filter vs comprehensions
+Compared the implementation of data transformations using `map`/`filter` versus list comprehensions.
 
-### Task E $-$ Lambda vs def
-This example demonstrates that both lambda expressions and def-functions behave the same way when implemented correctly.
+### Task E $-$ Simple Decorator
+Created a `@call_counter` decorator that tracks and prints the number of times a function is executed.
 
-### Task F $-$ Functional Composition
-Task F uses generator and lambda expressions to perform operations on the elements of a list.
+### Task F $-$ Decorator with Arguments
+Created a `@prefix(text)` decorator that takes arguments and prepends strings to function results.
+
+### Task G $-$ Caching Decorator
+Implemented a `@cache` decorator and demonstrated its performance benefits on the recursive Tribonacci sequence.
