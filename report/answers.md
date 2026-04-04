@@ -1,25 +1,21 @@
-# Answers to Lab04
+# Answers to Lab05
 
-1. What is a high-order function?
+1. What is the purpose of type hints in Python?
 
-    A higher-order function is a function that either takes one or more functions as arguments, returns a function as its result, or both. It treats functions as first-class objects.
+    * Type hints make it easier to catch errors in advance, during development. Some type checkers like `mypy` can analyze your code before actually running it. It notices type-related errors, like calling a method that doesn't exist for strings. This way the program is less likely to crash unexpectedly in production.
+    * Type hints make the code much easier to read. They provide clear instructions of what to pass in and what we will get back.
+    * Additionally, some IDEs can give better autocomplete suggestions and underline potential errors while writing code if type hints are given.
 
-2. What is the difference between `map` and list comprehension?
+2. What is the difference between `Any` and a generic type `T`?
 
-    * `map` is a built-in function that applies a specific transformation function to an iterable, returning a map object (an iterator)
-    * list comprehension is more readable, Python-syntactic construction that generates a new list entirely, and it has the added benefit of being able to map and filter elements simultaneously in a single expression
+    * `Any` means that we do not care of which type the variable will be. It is like we are 'turning off' the type check.
+    * `T` is more strict. When the variable is passed to the function it binds to this exact type, and checks it throughout the function's execution. It is often used when writing generalized functions or classes that work with various types. For instance, it is used when we need to return the same type that we passed in.
+    * The main difference is that generic types provide some level of safety, while `Any` literally means ingnoring the variable type.
 
-3. What is a decorator?
+3. What does `Callable[[int], int] describe?
 
-    A decorator is a design pattern in Python that allows us to dynamically modify or extend the behavior of a function or method without changing its source code. It is essentially a higher-order function that wraps another function. So it adds new qualities to a function, it is useful for repeated blocks or a more unified style of functions.
+    It describes a type of an object that can be passed to a function or a class, for example. It means a function or any other object that can be called that receives one `int` variable as input and outputs an `int` value as well. So it can be any kind of a unary operation with integer numbers.
 
-4. What is the difference between a simple decorator and a decorator with arguments?
+4. Why does `mypy --strict` require more annotations?
 
-    * A simple decorator is a single wrapper function that accepts the target function as its only argument. 
-    * A decorator with arguments requires an extra layer of nesting: the outerm function accepts the custom arguments and returns the actual decorator, which then accepts the target function and wraps it. So it is like a decorator factory.
-
-5. Why is caching useful?
-
-    * Caching stores the results of expensive or time-consuming function calls. 
-    * When the function is called again with the exact same arguments, it immediately returns the stored result instead of recalculating it. 
-    * This avoids unnecessary computations and improves performance, which is especially crucial for recursive algorithms.
+    By default, `mypy` allows to mix typed code with completely untyped code. If a function doesn't have annotations, `mypy` assumes that it returns the `Any` type. When using the `--strict` flag, we have to explicitly declare types everywhere. When this assuming doesn't work, we need to writh only fully typed functions, all containers (like `list` or `dict`) must have a specified type of what is inside them. In general, `mype --strict` ensures that the compiler knows the exact type of our data at every step.
