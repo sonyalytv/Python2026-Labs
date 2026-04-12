@@ -5,13 +5,13 @@
 - [Lab Structure](#lab-structure)
 - [Getting Started](#getting-started)
 - [Output Structure](#output-structure)
-- [Task A](#task-a--basic-type-hints)
-- [Task B](#task-b--typed-collections)
-- [Task C](#task-c--optional)
-- [Task D](#task-d--function-type)
-- [Task E](#task-e--generics)
-- [Task F](#task-f--functions-returning-function)
-- [Task G](#task-g--pipeline)
+- [Task A](#task-a--define-the-student-class)
+- [Task B](#task-b--inspect-internal-structure)
+- [Task C](#task-c--implement-__str__)
+- [Task D](#task-d--implement-__repr__)
+- [Task E](#task-e--implement-equality-__eq__)
+- [Task F](#task-f--implement-ordering-__lt__)
+- [Task G](#task-g--sorting)
 
 ## Goal
 In this lab a custom Python class is implemented and gradually transformed into a well-behaved object that integrates with the language. The goal of this lab is to practice:
@@ -33,18 +33,8 @@ lab06/
 │
 └─ src/
     ├─ lab06.py
-    │
-    └─ tasks/
-        ├─ task_a.py
-        ├─ task_b.py
-        ├─ task_c.py
-        ├─ task_d.py
-        ├─ task_e.py
-        ├─ task_f.py
-        └─ task_g.py
-        │
-        └─ utils/
-            └─ utils.py
+    ├─ student.py
+    └─ utils.py
 ```
 
 ## Getting Started
