@@ -1,4 +1,4 @@
-# LAB05: Type Hints, Generics, Mypy
+# LAB06: Python Object Model and Basic Object Behavior
 
 ## Table of Contents
 - [Goal](#goal)
@@ -14,19 +14,17 @@
 - [Task G](#task-g--pipeline)
 
 ## Goal
-The goal of this lab is to practive using **type hints** and to understand how static typing improves code reliability and clarity.
+In this lab a custom Python class is implemented and gradually transformed into a well-behaved object that integrates with the language. The goal of this lab is to practice:
 
-Students should demonstrate understanding of:
-* basic type annotations for functions
-* typed collections
-* generics using `TypeVar`
-* function types
-* static type checking with `mypy`
-* strict type checking discipline (`mypy --strict`)
+* working with classes and objects
+* understanding how attributes are stored
+* implementing basic dunder methods
+* controlling object behavior in Python
+* writing type-safe code with `mypy --strict`
 
 ## Lab Structure
 ```
-lab05/
+lab06/
 ├─ README.md
 ├─ requirements.txt
 │
@@ -34,7 +32,7 @@ lab05/
 │   └─ answers.md
 │
 └─ src/
-    ├─ lab05.py
+    ├─ lab06.py
     │
     └─ tasks/
         ├─ task_a.py
@@ -52,7 +50,7 @@ lab05/
 ## Getting Started
 Recommended Python version is `Python 3.12.6`.
 
-Open `lab05/` and run the following to setup the environment:
+Open `lab06/` and run the following to setup the environment:
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
@@ -64,33 +62,33 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 ```
 Command to run the program:
 ```bash
-python src/lab05.py
+python src/lab06.py
 ```
 Test passing strict type checking:
 ```bash
-mypy --strict src/lab05.py
+mypy --strict src/lab06.py
 ```
 
 ## Output Structure
-The program prints seven sections (A–G), each demonstrating a specific concept: typed annotations for functions, typed collections, generics, functions types.
+The program prints seven sections (A–G), each demonstrating a specific concept: classes in Python, attributes, dunder methods, and controlling object behavior.
 
-### Task A $-$ Basic Type Hints
-Implemented `add(a, b)` and `square_list` functions to demonstrate correct type annotations for functions.
+### Task A $-$ Define the `Student` class
+Created a `Student` class with `name`, `group`, `average_float` attributes, and initialized them via `__init__`.
 
-### Task B $-$ Typed Collections
-Utilized `filter` to leave only even numbers, demonstrated the use of typed collections.
+### Task B $-$ Inspect internal structure
+Demonstrated how attributes are stored inside the object.
 
-### Task C $-$ Optional
-Implemented a function that searched for an element in the list. It returns the position of the element if it is in the list, and `None` otherwise.
+### Task C $-$ Implement `__str__`
+Defined a user-friendly string representation by implementing an `__str__` dunder.
 
-### Task D $-$ Function Type
-Used an `apply` function to perform different operations over the variable. Showed the correct usage of function type `Callable`.
+### Task D $-$ Implement `__repr__`
+Defined a developer-oriented representation by implementing a `__repr__` dunder.
 
-### Task E $-$ Generics
-Created a `first` function that returns the first element of a list. Used `TypeVar` for correct type annotations inside the function.
+### Task E $-$ Implement equality (`__eq__`)
+Implemented an `__eq__` dunder to check the equality of two objects of the same class.
 
-### Task F $-$ Functions Returning Function
-Created a `make_multiplier` function facroty to demostrate type annotations for functions that return functions.
+### Task F $-$ Implement ordering (`__lt__`)
+Implemented an `__lt__` dunder to compare two objects of the same class.
 
-### Task G $-$ Pipeline
-Implemented a pipeline that leaves only the even elements in the list, squares them, and calculates their sum.
+### Task G $-$ Sorting
+Demonstrated that the created objects integrate with Python: can be sorted by `average_grade` attribute and printed in a user-friendly way.

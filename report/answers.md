@@ -1,21 +1,26 @@
-# Answers to Lab05
+# Answers to Lab06
 
-1. What is the purpose of type hints in Python?
+1. What is stored in `obj.__dict__`?
 
-    * Type hints make it easier to catch errors in advance, during development. Some type checkers like `mypy` can analyze your code before actually running it. It notices type-related errors, like calling a method that doesn't exist for strings. This way the program is less likely to crash unexpectedly in production.
-    * Type hints make the code much easier to read. They provide clear instructions of what to pass in and what we will get back.
-    * Additionally, some IDEs can give better autocomplete suggestions and underline potential errors while writing code if type hints are given.
+    It is a dictionary that stores an object's attributes. Keys are attributes names, and values are the corresponding values of these attributes.
 
-2. What is the difference between `Any` and a generic type `T`?
+2. What is the difference between a class and an object?
 
-    * `Any` means that we do not care of which type the variable will be. It is like we are 'turning off' the type check.
-    * `T` is more strict. When the variable is passed to the function it binds to this exact type, and checks it throughout the function's execution. It is often used when writing generalized functions or classes that work with various types. For instance, it is used when we need to return the same type that we passed in.
-    * The main difference is that generic types provide some level of safety, while `Any` literally means ingnoring the variable type.
+    * A class is like a template to create objects, it is similar to a data type. While objects are specific instances that contain data.
+    * One class can have many objects that are instances of this class.
 
-3. What does `Callable[[int], int] describe?
+3. What does `__init__` do?
 
-    It describes a type of an object that can be passed to a function or a class, for example. It means a function or any other object that can be called that receives one `int` variable as input and outputs an `int` value as well. So it can be any kind of a unary operation with integer numbers.
+    It is a dunder that is called automatically when an object is created. It initializes the object's attributes values.
 
-4. Why does `mypy --strict` require more annotations?
+4. Who calls `__str__`, and when?
 
-    By default, `mypy` allows to mix typed code with completely untyped code. If a function doesn't have annotations, `mypy` assumes that it returns the `Any` type. When using the `--strict` flag, we have to explicitly declare types everywhere. When this assuming doesn't work, we need to writh only fully typed functions, all containers (like `list` or `dict`) must have a specified type of what is inside them. In general, `mype --strict` ensures that the compiler knows the exact type of our data at every step.
+    It is called by `print()` and `str()` functions to produce a readable, user-friendly string representation of the object.
+
+5. What is the difference between `==` and `is`?
+
+    `==` checks the equality of the object values, while `is` checks the identity and is only `True` when the names refer to the same address in memory.
+
+6. Why do we use `other: object` in `__eq__` and `__lt__`?
+
+    To follow the `mypy --strict` typing rules. We should be able to call these methods with any other object. This way we can accept a general `object` without typing issues and then check the type using `isinstance` before comparing.
