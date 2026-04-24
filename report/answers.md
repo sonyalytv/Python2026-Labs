@@ -1,39 +1,37 @@
-# Answers to Lab07
+# Answers to Lab08
 
-1. What is duck typing?
+1. How does a `for` loop work with custom objects?
 
-    It is the principle of typing in Python, JavaScript, and some other programming languages: "If it walks like a duck and it quacks like a duck, then it must be a duck."
-    * It gives more flexibility than strict typing. The code can be more generic and work with different types of objects without the need to implement complex inheritance flows or interfaces.
-    * Thus, the code gets shorter and it takes less time to write it.
-    * However, it can lead to runtime errors and program crashes because the type isn't checked before the program runs.
+    It looks for `__next__` and `__iter__` methods. Firstly, it calls the `__iter__` dunder, then it repeatedly calls the `__next__` method until the `StopIteration` exception is raised, which means the end of the cycle, and prevents the program of going into an infinite loop.
 
-2. How does Protocol differ from ABC?
+2. What methods are required for iteration?
 
-    * ABC requires inheritance, while Protocol doesn't.
-    * When using ABC, classes are tied to it. With Protocol, classes don't even need to know that the Protocol exists.
-    * In general, Protocol is more flexible, and is used for reusable functions that accept any object, as long as it behaves the right way.
-    * ABC is used for building a strict framework, where classes share code and must belong together, which is stated clearly by inheritance.
+    As describes above, two methods are required for iteration: `__next__` and `__iter__`.
 
-3. Does Protocol require inheritance? Why or why not?
+3. How does the `with` statement work internally?
 
-    No, Protocol doesn't require inheritance. It works this way because its purpose is to simplify the code. It allows type checkers to verify that objects can perform certain actions without forcing those object into a strict set of specific data types.
+    * Its work is similar to the `try...except...finally` block. 
+    * When Python meets a `with` statement it calls `__enter__` method for the given object. If an error appear during the execution of the block, it stops the block, but the program doesn't crash. In the end,`__exit__` is called. If it returns `True` the program execution will continue after the `with` block, and will crash otherwise.
 
-4.  What problem does ABC solve?
+4.  When is `__exit __` called?
 
-    * It requires classes to have the needed methods. This way, the object creation fails if doesn't follow the pattern. It makes error tracking much easier in large projects. 
-    * Also, it is used for the Template Method Pattern. So sublclasses can have some helper methods and the developer doesn't have to rewrite all the code for each subclass.
+    * If the program runs perfectly, it is called at the end of the `with` block.
+    * If we meet an early exit (`return`, `continue`, etc.), it is called immediately, and then we exit the block.
+    * If an exception or an error is thrown inside the `with` block, `__exit__` method is called. It can handle the error, or not. If it returns `True` the program execution will continue after the block, and will crash otherwise.
 
-5. What does `@dataclass` generate automatically?
+5. What problem do descriptors solve?
 
-    * `__init__` $-$ the constructor. It takes all the fields defined and assigns them to `self`.
-    * `__repr__` $-$ the string representation.
-    * `__eq__` $-$ the equality checker. It allows to compare two object using `==`. It returns `True` if both objects are of the same class and their fields contain the same values.
+    Descriptors help to write reusable code. It is a class that defines setter/getter logic, and then it can be attributed to any variable that needs to follow these rules. This way, we implement this logic only once, and can reuse anywhere we need it.
 
-6. What changes when using `slots`?
+6. What happens if a descriptor is not used?
 
-    The object doesn't act as a dynamic dictionary any more. It is impossible to add fields if they aren't explicitly defined in the class. It helps to prevent passing values to misspelled fields. So the object gets stricter, and more memory efficient.
+    We need to solve the stated above problem in a different way.
+    * Use the usual `__init__` method, but no data validation will be performed when binding to a new value. So the program can crash unexpectedly during execution.
+    * Define setters and getters for each object separately. The code will have the same behavior. But the code gets difficult to support and develop. In case, if the validation rule changes, we will have to change it in each object. Also, the amount of code is bigger if we use this approach.
 
-7. Why does Protocol work with different implementations (regular class, dataclass, slots)?
+7. Why is direct iteration preferred over index-based loops in Python?
 
-    * Protocol looks at the public "surface" of an object, and doesn't care about its inside structure. It only checks that the required methods exist.
-    * Protocol ensures the expected behavior of objects, and doesn't restrict their state in any way.
+    * The code is much more readable if we use direct iteration.
+    * Not all data types have indexes (e.g., sets or dictionaries). Direct iteration is more flexible and can handle seamlessly more data types. The only requirement is that the object is iterable.
+    * When using iterators and not indexes, we are less likely to get an `index-out-of-range` error if the implementation is correct.
+    * It is a bit faster, as we don't need to calculate the index, and call a __getitem__ method to get the next value.

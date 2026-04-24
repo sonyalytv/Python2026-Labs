@@ -1,39 +1,24 @@
-from utils import add_task_header, export
-from dataclasses import dataclass
+from utils import add_task_header, Student
 
-@dataclass(slots=True)
-class StudentSlots:
-    name: str
-    group: str
-    average_grade: float
-    # __slots__ = ("name", "group", "average_grade")
-
-    def serialize(self) -> str:
-        return f"StudentSlots: name = {self.name}, group = {self.group}, average_grade = {self.average_grade}"
-
-@add_task_header("C", "Slots")
+@add_task_header("C", "Descriptor")
 def task_c() -> None:
-    student = StudentSlots("Maria", "E-521", 98.3)
-    print("Created an object 'student' of StudentSlots class")
-    print(student.serialize())
-    print("Called export(student):")
-    export(student)
-    print()
+    student = Student("Ksenia", "MIT-1123", 42.42)
+    print("Created a student object:")
+    print(student)
+    try:
+        new_grade = 90.99
+        student.grade = new_grade
+        print(f"Successfully changed the grade: {student.grade}")
+    except ValueError as e:
+        print(f"Tried to change the grade to {new_grade}, but caught a ValueError: {e}")
 
     try:
-        student.first_name = "Korobka"
-    except AttributeError:
-        print("Tried to add a new attribute 'first_name', but caught an AttributeError")
-    print()
+        new_grade = 125.14
+        student.grade = new_grade
+        print(f"Successfully changed the grade: {student.grade}")
+    except ValueError as e:
+        print(f"Tried to change the grade to {new_grade}, but caught a ValueError: {e}")
 
-    print(f"This object has __slots__:")
-    print(student.__slots__)
-    print()
-    print(f"And doesn't have __dict__:")
-    try:
-        print(student.__dict__)
-    except AttributeError:
-        print(f"Tried to access __dict___, but caught an AttributeError")
 
 if __name__ == "__main__":
     task_c()

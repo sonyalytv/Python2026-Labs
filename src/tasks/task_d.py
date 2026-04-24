@@ -1,32 +1,17 @@
-from utils import add_task_header, export
-from abc import ABC, abstractmethod
+from utils import add_task_header, Student, StudentCollection
 
-class SerializableABC(ABC):
-    @abstractmethod
-    def serialize(self) -> str:
-        pass
-
-class StudentABC(SerializableABC):
-    def __init__(self, name: str, group: str, average_grade: float) -> None:
-        self.name = name
-        self.group = group
-        self.average_grade = average_grade
-    
-    def serialize(self) -> str:
-        return f"StudentABC: name = {self.name}, group = {self.group}, average_grade = {self.average_grade}"
-
-def print_obj(obj: SerializableABC) -> None:
-    print(obj.serialize())
-
-@add_task_header("D", "ABC version")
+@add_task_header("D", "Integration")
 def task_d() -> None:
-    student = StudentABC("Daryna", "XT-1323", 91.7)
-    print("Created an object 'student' of StudentABC class")
-    print(student.serialize())
-    print("Protocol -> Called export(student):")
-    export(student)
-    print("ABC interface -> Called print_obj(student):")
-    print_obj(student)
+    students = [
+        Student("Tetyana", "KN-125", 88.8),
+        Student("Mykola", "XT-1122", 99.9),
+        Student("Yegor", "E-1621", 77.77),
+    ]
+    with StudentCollection(students) as collection:
+        for student in collection:
+            print(student.grade)
+    print()
+    print("Demonstrated that all the created components can be used together")
 
 if __name__ == "__main__":
     task_d()

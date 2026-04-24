@@ -1,6 +1,8 @@
 @echo off
+cd /d "%~dp0"
+
 echo ==========================================
-echo         Lab07 Setup and Execution
+echo        Lab08 Setup and Execution
 echo ==========================================
 echo.
 
@@ -11,20 +13,20 @@ echo [2/4] Activating the virtual environment...
 call .venv\Scripts\activate.bat
 
 echo [3/4] Installing requirements...
-:: Note: This will show an error if requirements.txt doesn't exist yet!
 pip install -r requirements.txt
 
 echo.
 echo [4/4] Running mypy strict type checking...
-mypy --strict src/lab07.py
-echo The above errors are intentional, see the lab below...
+mypy --strict .
+echo.
+echo (The above mypy errors, if any, are intentional for the lab)
 
 echo.
 echo ==========================================
-echo              Running Lab07
+echo              Running Lab08
 echo ==========================================
 echo.
-python src/lab07.py
+python src/lab08.py
 
 echo.
 echo ==========================================
