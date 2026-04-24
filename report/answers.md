@@ -1,26 +1,39 @@
-# Answers to Lab06
+# Answers to Lab07
 
-1. What is stored in `obj.__dict__`?
+1. What is duck typing?
 
-    It is a dictionary that stores an object's attributes. Keys are attributes names, and values are the corresponding values of these attributes.
+    It is the principle of typing in Python, JavaScript, and some other programming languages: "If it walks like a duck and it quacks like a duck, then it must be a duck."
+    * It gives more flexibility than strict typing. The code can be more generic and work with different types of objects without the need to implement complex inheritance flows or interfaces.
+    * Thus, the code gets shorter and it takes less time to write it.
+    * However, it can lead to runtime errors and program crashes because the type isn't checked before the program runs.
 
-2. What is the difference between a class and an object?
+2. How does Protocol differ from ABC?
 
-    * A class is like a template to create objects, it is similar to a data type. While objects are specific instances that contain data.
-    * One class can have many objects that are instances of this class.
+    * ABC requires inheritance, while Protocol doesn't.
+    * When using ABC, classes are tied to it. With Protocol, classes don't even need to know that the Protocol exists.
+    * In general, Protocol is more flexible, and is used for reusable functions that accept any object, as long as it behaves the right way.
+    * ABC is used for building a strict framework, where classes share code and must belong together, which is stated clearly by inheritance.
 
-3. What does `__init__` do?
+3. Does Protocol require inheritance? Why or why not?
 
-    It is a dunder that is called automatically when an object is created. It initializes the object's attributes values.
+    No, Protocol doesn't require inheritance. It works this way because its purpose is to simplify the code. It allows type checkers to verify that objects can perform certain actions without forcing those object into a strict set of specific data types.
 
-4. Who calls `__str__`, and when?
+4.  What problem does ABC solve?
 
-    It is called by `print()` and `str()` functions to produce a readable, user-friendly string representation of the object.
+    * It requires classes to have the needed methods. This way, the object creation fails if doesn't follow the pattern. It makes error tracking much easier in large projects. 
+    * Also, it is used for the Template Method Pattern. So sublclasses can have some helper methods and the developer doesn't have to rewrite all the code for each subclass.
 
-5. What is the difference between `==` and `is`?
+5. What does `@dataclass` generate automatically?
 
-    `==` checks the equality of the object values, while `is` checks the identity and is only `True` when the names refer to the same address in memory.
+    * `__init__` $-$ the constructor. It takes all the fields defined and assigns them to `self`.
+    * `__repr__` $-$ the string representation.
+    * `__eq__` $-$ the equality checker. It allows to compare two object using `==`. It returns `True` if both objects are of the same class and their fields contain the same values.
 
-6. Why do we use `other: object` in `__eq__` and `__lt__`?
+6. What changes when using `slots`?
 
-    To follow the `mypy --strict` typing rules. We should be able to call these methods with any other object. This way we can accept a general `object` without typing issues and then check the type using `isinstance` before comparing.
+    The object doesn't act as a dynamic dictionary any more. It is impossible to add fields if they aren't explicitly defined in the class. It helps to prevent passing values to misspelled fields. So the object gets stricter, and more memory efficient.
+
+7. Why does Protocol work with different implementations (regular class, dataclass, slots)?
+
+    * Protocol looks at the public "surface" of an object, and doesn't care about its inside structure. It only checks that the required methods exist.
+    * Protocol ensures the expected behavior of objects, and doesn't restrict their state in any way.

@@ -1,46 +1,60 @@
-# LAB06: Python Object Model and Basic Object Behavior
+# LAB07: Behavior, Protocols, ABC, Dataclasses, Slots
 
 ## Table of Contents
 - [Goal](#goal)
 - [Lab Structure](#lab-structure)
 - [Getting Started](#getting-started)
 - [Output Structure](#output-structure)
-- [Task A](#task-a--define-the-student-class)
-- [Task B](#task-b--inspect-internal-structure)
-- [Task C](#task-c--implement-__str__)
-- [Task D](#task-d--implement-__repr__)
-- [Task E](#task-e--implement-equality-__eq__)
-- [Task F](#task-f--implement-ordering-__lt__)
-- [Task G](#task-g--sorting)
+- [Task A](#task-a--regular-class-duck-typing)
+- [Task B](#task-b--dataclass-implementation)
+- [Task C](#task-c--slots)
+- [Task D](#task-d--abc-version)
 
 ## Goal
-In this lab a custom Python class is implemented and gradually transformed into a well-behaved object that integrates with the language. The goal of this lab is to practice:
+In this lab we explore different ways to define and implement behavior in Python.
 
-* working with classes and objects
-* understanding how attributes are stored
-* implementing basic dunder methods
-* controlling object behavior in Python
-* writing type-safe code with `mypy --strict`
+We work with a single concept $-$ an object that can be serialized $-$ and implement it using different approaches:
+Students should demonstrate understanding of:
+* duck typing (regular class)
+* Protocol (structural typing)
+* dataclass
+* slots
+* Abstract Base Classes (ABC)
+
+The goal is to understand how Python defines "type" through behavior rather than inheritance.
 
 ## Lab Structure
 ```
-lab06/
+lab07/
 ├─ README.md
 ├─ requirements.txt
+├─ runme.bat
 │
 ├─ report/
 │   └─ answers.md
 │
 └─ src/
-    ├─ lab06.py
-    ├─ student.py
-    └─ utils.py
+    ├─ lab07.py
+    └─ tasks/
+        ├─ __init__.py
+        ├─ task_a.py
+        ├─ task_b.py
+        ├─ task_c.py
+        └─ task_d.py
+    └─ utils/
+        ├─ __init__.py
+        ├─ preparation.py
+        └─ utils.py
 ```
 
 ## Getting Started
+For simple and fast lab execution, double click `runme.bat` file to run it.
+
+To work directly with the code, follow the instructions below.
+
 Recommended Python version is `Python 3.12.6`.
 
-Open `lab06/` and run the following to setup the environment:
+Open `lab07/` and run the following to setup the environment:
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
@@ -52,33 +66,24 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 ```
 Command to run the program:
 ```bash
-python src/lab06.py
+python src/lab07.py
 ```
 Test passing strict type checking:
 ```bash
-mypy --strict src/lab06.py
+mypy --strict .
 ```
 
 ## Output Structure
-The program prints seven sections (A–G), each demonstrating a specific concept: classes in Python, attributes, dunder methods, and controlling object behavior.
+The program prints four sections (A–D), each demonstrating a specific approach to creating an object: regular classes, Protocols, dataclasses, slots, Abstract Base Classes.
 
-### Task A $-$ Define the `Student` class
-Created a `Student` class with `name`, `group`, `average_float` attributes, and initialized them via `__init__`.
+### Task A $-$ Regular class (duck typing)
+Implemented a regular class `StudentRegular` which doesn't inherit from anything. It still works with the general Protocol of `Serializable` object. It demonstrates duck typing.
 
-### Task B $-$ Inspect internal structure
-Demonstrated how attributes are stored inside the object.
+### Task B $-$ Dataclass implementation
+Utilized `dataclass` to create a dataclass version of the student class $-$ `StudentData`. The code is easier to read, the behavior is the same as in Task A, the object is fully compatible with the Protocol.
 
-### Task C $-$ Implement `__str__`
-Defined a user-friendly string representation by implementing an `__str__` dunder.
+### Task C $-$ Slots
+Created a dataclass with slots $-$ `StudentSlots`. The Protocol works, the object structure is now restricted, and its internal storage differs from regular objects.
 
-### Task D $-$ Implement `__repr__`
-Defined a developer-oriented representation by implementing a `__repr__` dunder.
-
-### Task E $-$ Implement equality (`__eq__`)
-Implemented an `__eq__` dunder to check the equality of two objects of the same class.
-
-### Task F $-$ Implement ordering (`__lt__`)
-Implemented an `__lt__` dunder to compare two objects of the same class.
-
-### Task G $-$ Sorting
-Demonstrated that the created objects integrate with Python: can be sorted by `average_grade` attribute and printed in a user-friendly way.
+### Task D $-$ ABC version
+Used an abstract base class (ABC) and implemented `StudentABC` to get the same behavior as in the previous tasks. Showed that ABC requires inheritance, unlike Protocol.
