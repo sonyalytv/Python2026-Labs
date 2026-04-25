@@ -1,53 +1,45 @@
-# LAB08: Iteration, Context Managers, and Descriptors
+# LAB09: Repairing a Broken Python Project
 
 ## Table of Contents
 - [Goal](#goal)
 - [Lab Structure](#lab-structure)
 - [Getting Started](#getting-started)
-- [Output Structure](#output-structure)
-- [Task A](#task-a--iteration)
-- [Task B](#task-b--context-manager)
-- [Task C](#task-c--descriptor)
-- [Task D](#task-d--integration)
+- [Task A](#task-a--clean-project-shape)
+- [Task B](#task-b--public-vs-private-design)
+- [Task C](#task-c--execution-behaviour)
+- [Task D](#task-d--package-level-api)
+- [Task E](#task-e--stable-usage)
 
 ## Goal
-In this lab we implement a custom object that integrates with Python through several core protocols.
+Transform the given project into a clean, structured, and usable Python tool.
 
-We work with a collection of students and extend it step by step so that it:
-* can be used in a `for` loop (iteration protocol)
-* can be used in a `with` statement (context manager protocol)
-* validates attribute access (descriptor)
-
-The goal is to understand that Python behavior is driven by protocols implemented via special methods.
+The focus of this lab is not on algorithms, but on:
+*  project structure 
+* modules and packages 
+* imports 
+* public vs private API 
+* reproducible usage 
 
 ## Lab Structure
 ```
-lab08/
+lab09/
 ├─ README.md
 ├─ requirements.txt
-├─ runme.bat
 │
 ├─ report/
-│   └─ answers.md
+│   └─ report.md
 │
 └─ src/
-    ├─ lab08.py
-    ├─ tasks/
-    │   ├─ __init__.py
-    │   ├─ task_a.py
-    │   ├─ task_b.py
-    │   ├─ task_c.py
-    │   └─ task_d.py
-    └─ utils/
+    ├─ README.md
+    └─ tasks/
         ├─ __init__.py
-        └─ utils.py
+        ├─ __main__.py
+        ├─ analyzer.py
+        ├─ formatter.py
+        └─ storage.py
 ```
 
 ## Getting Started
-For simple and fast lab execution, double click `runme.bat` file to run it.
-
-To work directly with the code, follow the instructions below.
-
 Recommended Python version is `Python 3.12.6`.
 
 Open `lab08/` and run the following to setup the environment:
@@ -60,26 +52,75 @@ If environment activation fails try running:
 ```bash
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 ```
-Command to run the program:
+You can run the tool as a complete package to see its capabilities and a demonstration workflow:
 ```bash
-python src/lab08.py
+python -m src.report_tool
+```
+You can also run each induvidual module:
+```bash
+python -m src.report_tool.analyzer
+python -m src.report_tool.formatter
+python -m src.report_tool.storage
 ```
 Test passing strict type checking:
 ```bash
 mypy --strict .
 ```
 
-## Output Structure
-The program prints four sections (A–D), each demonstrating a specific concepts, extending a created collection step-by-step: iteration protocols, context manager protocols, descriptors.
 
-### Task A $-$ Iteration
-Created a class `StudentCollection` that can store multiple students. Implemented `__iter__` and `__next__` dunders to make it iterable.
+### Task A $-$ Clean project shape
+The project should have:
+* a clear and coherent structure; 
+* meaningful module names; 
+* no leftover debugging or testing code inside modules; 
+* a cleaned `requirements.txt` reflecting actual dependencies; 
+* a concise and usable `README.md` explaining: 
+    * what the tool does, 
+    * how to run it, 
+    * how to use it.
 
-### Task B $-$ Context Manager
-Extended the `StudentCollection` class so that it could act as a context by implementing `__enter__` and `__exit__` methods.
 
-### Task C $-$ Descriptor
-Created a descriptor to validate student grades. As a result, invalid values get rejected.
+### Task B $-$ Public vs private design
+The project should have:
+* meaningful function names; 
+* a clear distinction between public and internal functions; 
+* internal functions marked using underscore (`_`) convention; 
+* a consistent and intentional public API. 
 
-### Task D $-$ Integration
-Demonstrated how all the components can be used together.
+
+### Task C $-$ Execution behaviour
+The project must behave as follows:
+
+*Running the tool as a package*
+```bash
+python -m report_tool
+```
+Should produce:
+* a short description of the tool; 
+* a list of its main public capabilities; 
+* minimal usage instructions; 
+* one or more examples. 
+
+*Running individual modules*
+
+Each module should be runnable and should:
+* describe its purpose; 
+* list its public functions; 
+* show minimal usage examples. 
+
+
+### Task D $-$ Package-level API
+Public functions must be importable directly from the package:
+```bash
+from report_tool import ...
+```
+* Internal functions should not appear as part of the public API. 
+* The package API should be clean and predictable.
+
+
+### Task E $-$ Stable usage
+The project should be stable and predictable to use:
+* no path hacks (e.g., no `sys.path.append`); 
+* consistent execution model; 
+* documentation matches actual behavior; 
+* another developer should be able to run and use the tool without guessing.

@@ -1,1 +1,1 @@
-mypy
+# No external dependencies are required
