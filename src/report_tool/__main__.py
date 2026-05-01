@@ -1,38 +1,55 @@
+import argparse
+import logging
+import sys
 from .analyzer import parse_numbers, analyze_numbers
-from .formatter import build_report, build_sorted_report
-from .storage import save_report, read_back
+from .formatter import build_sorted_report, build_sorted_json_report
+from .storage import save_report, read_input
 
-def show_help() -> None:
-    print("Report Tool")
-    print("=" * 30)
-    print("This tool works with simple numeric reports.")
-    print("Use it to parse numbers, analyze them, format a report, and save it.\n")
-    print("Public Capabilities:")
-    print(" - parse_numbers: Convert string to list of floats")
-    print(" - analyze_numbers: Calculate sum, min, max, and mean")
-    print(" - build_report / build_sorted_report: Format stats into text")
-    print(" - save_report / read_back: Handle file operations\n")
-    print("Example usage in code:")
-    print("  from report_tool import parse_numbers, analyze_numbers")
-    print('  numbers = parse_numbers("1, 2, 3, 4.5")\n')
+logger = logging.getLogger(__name__)
 
-def example_workflow() -> str:
-    text = "4, 8, 15, 16, 23, 42"
-    numbers = parse_numbers(text)
-    stats = analyze_numbers(numbers)
-    report = build_sorted_report(numbers, stats)
-    return report
+def setup_logging(level_name: str) -> None:
+    level = getattr(logging, level_name.upper(), logging.INFO)
+    logging.basicConfig(
+        level=level,
+        format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+        datefmt='%H:%M:%S'
+    )
 
 def main() -> None:
-    show_help()
-    print("--- Running Example Workflow ---")
-    report = example_workflow()
-    print(report)
+    parser = argparse.ArgumentParser(description="Report Tool: A CLI for numeric data analysis.")
+    parser.add_argument("--input", required=True, help="Path to the input file containing numeric data")
+    parser.add_argument("--out", required=True, help="Path where the report will be saved")
+    parser.add_argument("--format", choices=['text', 'json'], default='text', help="Output format for the report")
+    parser.add_argument("--log-level", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'], default='INFO', help="Set the logging level")
 
-    path = save_report(report, "report_output")
-    print(f"\nSaved to: {path}\n")
-    print("Saved file content:")
-    print(read_back(str(path)))
+    args = parser.parse_args()
+    setup_logging(args.log_level)
+
+    logger.info("Starting Report Tool pipeline")
+
+    try:
+        # Step 1: Read input
+        raw_text = read_input(args.input)
+
+        # Step 2: Parse and Analyze
+        numbers = parse_numbers(raw_text)
+        stats = analyze_numbers(numbers)
+
+        # Step 3: Format output
+        if args.format == 'json':
+            logger.info("Formatting output as JSON")
+            report = build_sorted_json_report(numbers, stats)
+        else:
+            logger.info("Formatting output as Text")
+            report = build_sorted_report(numbers, stats)
+
+        # Step 4: Write output
+        save_report(report, args.out)
+        logger.info(f"Pipeline finished successfully. Output saved to {args.out}")
+
+    except Exception as e:
+        logger.error(f"An error occurred during execution: {e}", exc_info=args.log_level == 'DEBUG')
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

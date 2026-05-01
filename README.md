@@ -1,28 +1,28 @@
-# LAB09: Repairing a Broken Python Project
+# LAB10: Command-Line Report Tool
 
 ## Table of Contents
 - [Goal](#goal)
 - [Lab Structure](#lab-structure)
 - [Getting Started](#getting-started)
-- [Task A](#task-a--clean-project-shape)
-- [Task B](#task-b--public-vs-private-design)
-- [Task C](#task-c--execution-behaviour)
-- [Task D](#task-d--package-level-api)
-- [Task E](#task-e--stable-usage)
+- [Task A](#task-a--command-line-interface)
+- [Task B](#task-b--file-based-workflow)
+- [Task C](#task-c--multiple-output-formats)
+- [Task D](#task-d--controlled-logging)
+- [Task E](#task-e--clean-integration-with-existing-package)
 
 ## Goal
-Transform the given project into a clean, structured, and usable Python tool.
+Extend your existing report tool so that it can be used as a real command-line tool that reads input data from files, processes it using your existing logic, produces output in different formats, and provides controlled logging of its execution.
 
-The focus of this lab is not on algorithms, but on:
-*  project structure 
-* modules and packages 
-* imports 
-* public vs private API 
-* reproducible usage 
+The focus of this lab is on:
+* CLI design (`argparse`)
+* file handling (`pathlib`)
+* structured data (`json`)
+* logging (`logging`)
+* integration with an existing codebase
 
 ## Lab Structure
 ```
-lab09/
+lab10/
 ├─ README.md
 ├─ requirements.txt
 │
@@ -42,7 +42,7 @@ lab09/
 ## Getting Started
 Recommended Python version is `Python 3.12.6`.
 
-Open `lab08/` and run the following to setup the environment:
+Open `lab010/` and run the following to setup the environment:
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
@@ -68,59 +68,40 @@ mypy --strict .
 ```
 
 
-### Task A $-$ Clean project shape
-The project should have:
-* a clear and coherent structure; 
-* meaningful module names; 
-* no leftover debugging or testing code inside modules; 
-* a cleaned `requirements.txt` reflecting actual dependencies; 
-* a concise and usable `README.md` explaining: 
-    * what the tool does, 
-    * how to run it, 
-    * how to use it.
-
-
-### Task B $-$ Public vs private design
-The project should have:
-* meaningful function names; 
-* a clear distinction between public and internal functions; 
-* internal functions marked using underscore (`_`) convention; 
-* a consistent and intentional public API. 
-
-
-### Task C $-$ Execution behaviour
-The project must behave as follows:
-
-*Running the tool as a package*
+### Task A $-$ Command-line interface
+The tool must support the following command format:
 ```bash
-python -m report_tool
+python -m report_tool --input <file> --out <file> --format text|json --log-level DEBUG|INFO|WARNING|ERROR
 ```
-Should produce:
-* a short description of the tool; 
-* a list of its main public capabilities; 
-* minimal usage instructions; 
-* one or more examples. 
+* All arguments must be handled through a command-line interface.
+* The program must not require code modification to change input, output, or format.
 
-*Running individual modules*
-
-Each module should be runnable and should:
-* describe its purpose; 
-* list its public functions; 
-* show minimal usage examples. 
+### Task B $-$ File-based workflow
+The tool must:
+* read numeric data from an input file;
+* process it using the existing pipeline (parse -> analyze -> format); 
+* write the result to the specified output file.
+* File handling must be implemented in a clear and reliable way. 
 
 
-### Task D $-$ Package-level API
-Public functions must be importable directly from the package:
-```bash
-from report_tool import ...
-```
-* Internal functions should not appear as part of the public API. 
-* The package API should be clean and predictable.
+### Task C $-$ Multiple output formats
+The tool must support two output formats:
+
+* `text`: human-readable report (based on your existing formatting logic).
+* `json`: structured output based on analysis results.
+* Both formats must be generated from the same analysis result, not from each other.
 
 
-### Task E $-$ Stable usage
-The project should be stable and predictable to use:
-* no path hacks (e.g., no `sys.path.append`); 
-* consistent execution model; 
-* documentation matches actual behavior; 
-* another developer should be able to run and use the tool without guessing.
+### Task D $-$ Controlled logging
+The tool must use logging to report its execution.
+* log the main steps of the pipeline (reading input, parsing, analysis, writing output);
+* do not mix logging output with the main program output;
+* support user-controlled logging level via: `--log-level DEBUG|INFO|WARNING|ERROR`.
+
+
+### Task E $-$ Clean integration with existing package
+The new functionality must:
+* be integrated into the existing report tool structure;
+* preserve module responsibilities from Lab 09;
+* not move all logic into a single file;
+* keep the package-level API meaningful and usable.
