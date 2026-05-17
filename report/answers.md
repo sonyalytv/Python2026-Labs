@@ -1,16 +1,21 @@
-# Lab 11 Report
+# Lab 12 Report
 
-1. Why does `await` inside a loop lead to sequential execution?
-Because `await` pauses the execution of the surrounding coroutine until the awaited task completes. Inside a loop, this prevents the loop from moving to the next iteration to start the next task, forcing them to run one at a time.
+1. What is the difference between unit tests and behavior tests?
 
-2. How does `asyncio.gather` change behavior?
-It schedules multiple awaitable objects to run concurrently on the event loop. Instead of waiting for one task to finish before starting the next, it initializes all of them at once, allowing their I/O wait times to overlap.
+Unit tests  verify individual components of the code (like a single function or class) to ensure the specific internal logic works correctly. Behavior tests (or black-box tests) treat the program as a complete system, interacting with it exactly as a user would (providing inputs and verifying outputs) without looking at internal implementations.
 
-3. What happens if one task fails in async mode without `--continue-on-error`?
-When a task fails, it raises an exception. `asyncio.gather` will immediately propagate the first exception it receives up to the caller. This causes the program to stop on the first error and exit with a non-zero code.
+2. Why is subprocess used for CLI testing?
 
-4. Why is a semaphore needed?
-A semaphore controls the number of tasks that can run at the same time. If you thousands of concurrent network or file requests are launched, we can easily hit OS limits or overload a target server. A semaphore prevents this by acting as a bottleneck.
+Using `subprocess` allows the test environment to create an entirely separate system process for the application. This ensures we are testing the true command-line interface, including argument parsing (`argparse`), environment setup, and standard output/error capture, rather than just calling a Python function inside our test suite.
 
-5. When should async NOT be used?
-Async should not be used for CPU-bound operations (e.g., heavy mathematical computations, image processing). Because of Python's Global Interpreter Lock (GIL), a CPU-bound task will block the entire event loop, preventing any other async tasks from running. Multiprocessing is better suited for those tasks.
+3. What happens if one async task fails without error handling?
+
+If an asynchronous task fails without being caught by a try/except block, it raises an exception. Functions like `asyncio.gather` will immediately propagate this first exception up to the caller, causing the main event loop to crash, terminating the program with a non-zero exit code, and leaving other concurrent tasks unfinished.
+
+4. When should you test internal functions vs full system behavior?
+
+You should test internal functions (unit tests) to verify complex algorithmic logic, edge cases, and distinct modules because these tests execute extremely fast and pinpoint the exact location of failures. You should test system behavior to verify that all the separate modules are wired together correctly and that the user receives the expected end result.
+
+5. What are the risks of time-based tests?
+
+Time-based tests are highly unreliable and prone to "flakiness." Execution time fluctuates wildly depending on the operating system's process scheduling, CPU load, and the hardware of the machine running the tests. A strict timing threshold that passes locally might randomly fail elsewhere.
